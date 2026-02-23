@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Porque te gustan las rosas y porque estas preciosa 🌹💕</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Niconne&display=swap" rel="stylesheet">
+  
+  <script async src="https://ga.jspm.io/npm:es-module-shims@1.6.3/dist/es-module-shims.js" crossorigin="anonymous"></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"
+    }
+  }
+  </script>
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      height: 100vh;
+      background: radial-gradient(circle at center, #2a0d1a, #0a0015 70%);
+      overflow: hidden;
+      font-family: 'Niconne', cursive;
+      color: #ff69b4;
+    }
+    h1 {
+      position: absolute;
+      top: 8%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 8vw;
+      text-shadow: 0 0 20px #ff1493, 0 0 40px #c71585;
+      z-index: 20;
+      animation: glow 4s infinite alternate;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ff69b4; }
+      to   { text-shadow: 0 0 40px #ff1493, 0 0 80px #c71585; }
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    #rose-3d {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 5;
+    }
+
+    .flowers {
+      position: absolute;
+      width: 100%; height: 100%;
+      bottom: 0;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .flower {
+      position: absolute;
+      bottom: 0;
+      animation: blossom 5s ease-in-out forwards;
+      animation-delay: calc(var(--delay) * 1s);
+    }
+    @keyframes blossom {
+      0% { transform: scale(0) rotateY(0deg); opacity: 0; }
+      100% { transform: scale(1) rotateY(720deg); opacity: 1; }
+    }
+
+    .petal {
+      position: absolute;
+      width: 18px;
+      height: 28px;
+      background: radial-gradient(#ff69b4, #c71585);
+      border-radius: 50% 0 50% 50%;
+      opacity: 0.8;
+      animation: fall linear infinite;
+      box-shadow: 0 0 12px #ff1493;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-150vh) rotate(0deg); }
+      100% { transform: translateY(150vh) rotate(1080deg); }
+    }
+
+    main { position: relative; z-index: 1; }
+    p {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: max(3.3vw, 15px);
+      color: rgba(255, 255, 255, 0.5);
+      z-index: 15;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      user-select: none;
+      z-index: 0;
+    }
+
+    /* BOTÓN ESPECIAL - más chico y un poco más abajo */
+    .special-btn {
+      position: fixed;
+      bottom: 10%;  /* ← bajado de 15% a 10% */
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 30px;  /* más chico */
+      font-size: 1.8rem;   /* más chico que 2.5rem */
+      font-family: 'Niconne', cursive;
+      color: #fff;
+      background: linear-gradient(135deg, #ff69b4, #c71585);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(255,105,180,0.7);
+      z-index: 25;
+      transition: all 0.3s ease;
+      animation: pulse-heart 2.5s infinite alternate;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .special-btn:hover {
+      transform: translateX(-50%) scale(1.1);
+      box-shadow: 0 0 50px #ff1493;
+    }
+
+    @keyframes pulse-heart {
+      0% { transform: translateX(-50%) scale(1); }
+      100% { transform: translateX(-50%) scale(1.05); }
+    }
+
+    .special-btn::before {
+      content: '🌹 ';
+    }
+    .special-btn::after {
+      content: ' 🌹';
+    }
+  </style>
+</head>
+<body class="not-loaded">
+  <div class="container">
+    <main>
+      <h1>Porque te gustan las rosas y porque estas preciosa 🌹</h1>
+      <p>Con todo cariño 💕</p>
+    </main>
+
+    <div id="rose-3d"></div>
+
+    <div class="flowers">
+      <div class="flower" style="--delay:0; left:15%; --flower-color:#ff69b4;">
+        <div class="flower__leafs">
+          <div class="flower__leaf" style="background:var(--flower-color); transform:rotate(0deg) scale(1);"></div>
+          <div class="flower__leaf" style="background:var(--flower-color); transform:rotate(45deg) scale(0.9);"></div>
+          <div class="flower__leaf" style="background:var(--flower-color); transform:rotate(90deg) scale(1.1);"></div>
+          <div class="flower__leaf" style="background:var(--flower-color); transform:rotate(135deg) scale(0.95);"></div>
+          <div class="flower__white-circle"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTÓN AJUSTADO -->
+    <a href="especial.html" class="special-btn">Para ti</a>
+  </div>
+
+  <!-- Pétalos cayendo -->
+  <script>
+    function createPetal() {
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      petal.style.left = Math.random() * 100 + '%';
+      petal.style.animationDuration = (Math.random() * 12 + 8) + 's';
+      petal.style.animationDelay = Math.random() * 6 + 's';
+      petal.style.opacity = Math.random() * 0.4 + 0.6;
+      document.body.appendChild(petal);
+      setTimeout(() => petal.remove(), 25000);
+    }
+    for(let i=0; i<40; i++) createPetal();
+    setInterval(createPetal, 600);
+  </script>
+
+  <script>
+    window.onload = () => {
+      setTimeout(() => {
+        document.body.classList.remove('not-loaded');
+      }, 800);
+    };
+  </script>
+
+  <!-- ROSA 3D con múltiples clones -->
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+
+    let container, camera, scene, renderer, controls;
+    let originalObject;
+
+    const materialBase = new THREE.MeshStandardMaterial({
+      metalness: 0,
+      roughness: 0.8,
+      side: THREE.DoubleSide
+    });
+
+    init();
+    animate();
+
+    function init() {
+      container = document.getElementById('rose-3d');
+
+      camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 2000);
+      camera.position.set(0, 100, 400);
+
+      scene = new THREE.Scene();
+
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+      scene.add(ambientLight);
+
+      const pointLight = new THREE.PointLight(0xffffff, 1.2);
+      pointLight.position.set(200, 300, 200);
+      scene.add(pointLight);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.shadowMap.enabled = true;
+      container.appendChild(renderer.domElement);
+
+      controls = new OrbitControls(camera, renderer.domElement);
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 1.5;
+      controls.enableDamping = true;
+      controls.enablePan = true;
+      controls.minDistance = 100;
+      controls.maxDistance = 800;
+      controls.target.set(0, 0, 0);
+      controls.update();
+
+      const loader = new OBJLoader();
+      loader.load(
+        'https://happy358.github.io/Images/Model/red_rose3.obj',
+        (obj) => {
+          originalObject = obj;
+          originalObject.traverse((child) => {
+            if (child.isMesh) {
+              let mat = materialBase.clone();
+              if (child.name.includes('rose')) mat.color.set('crimson');
+              else if (child.name.includes('calyx')) mat.color.set('#001a14');
+              else if (child.name.includes('leaf')) mat.color.set('#00331b');
+              child.material = mat;
+              child.castShadow = true;
+              child.receiveShadow = true;
+            }
+          });
+          originalObject.rotation.set(0, Math.PI / 1.7, 0);
+
+          const positions = [
+            {x: 0, y: -50, z: 0, scale: 0.4, rotY: 0},
+            {x: 150, y: -30, z: 100, scale: 0.35, rotY: Math.PI / 4},
+            {x: -120, y: -40, z: -80, scale: 0.45, rotY: -Math.PI / 3},
+            {x: 80, y: -20, z: -150, scale: 0.3, rotY: Math.PI / 2},
+            {x: -180, y: -60, z: 50, scale: 0.38, rotY: -Math.PI / 5},
+            {x: 0, y: 20, z: 120, scale: 0.32, rotY: Math.PI}
+          ];
+
+          positions.forEach(pos => {
+            const clone = originalObject.clone();
+            clone.position.set(pos.x, pos.y, pos.z);
+            clone.scale.setScalar(pos.scale);
+            clone.rotation.y = pos.rotY;
+            scene.add(clone);
+          });
+        },
+        (xhr) => console.log((xhr.loaded / xhr.total * 100) + '% cargado'),
+        (err) => console.error('Error:', err)
+      );
+
+      window.addEventListener('resize', onWindowResize);
+    }
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+  </script>
+</body>
+</html>

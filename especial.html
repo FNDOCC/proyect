@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Algo especial para ti 🌹✨</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Niconne&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      height: 100vh;
+      background: radial-gradient(ellipse at bottom, #0a0015 0%, #000814 40%, #000 100%);
+      overflow: hidden;
+      font-family: 'Dancing Script', cursive;
+      color: #ffe6f0;
+      position: relative;
+    }
+
+    /* Estrellas */
+    .stars {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0;
+      animation: twinkle 5s infinite alternate, appear 12s forwards;
+      box-shadow: 0 0 6px rgba(255,255,255,0.9);
+    }
+    @keyframes appear { 0% { opacity: 0; } 100% { opacity: var(--opacity); } }
+    @keyframes twinkle { 0%,100% { opacity: var(--opacity); transform: scale(1); } 50% { opacity: calc(var(--opacity) * 0.6); transform: scale(1.2); } }
+
+    /* CONTENEDOR MAESTRO */
+    #castle {
+      position: absolute;
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.2);
+      width: 300px;
+      height: 450px;
+      z-index: 5;
+    }
+
+    /* MESA */
+    #table {
+      position: absolute;
+      bottom: -80px;
+      left: 52%;
+      transform: translateX(-50%) scaleY(0.5);
+      width: 550px;
+      height: 200px;
+      background: radial-gradient(#a3727e, #af7279, #a16674);
+      border-radius: 100%;
+      border-bottom: 50px solid #623c53;
+      z-index: 1;
+    }
+
+    /* CAMPANA DE VIDRIO - sin movimiento */
+    .shade-wrap {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 350px;
+      z-index: 10;
+      /* Importante: ya NO tiene animación */
+    }
+
+    #shade-main {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-top: 1px solid rgba(255,255,255,0.5);
+      border-left: 1px solid rgba(255,255,255,0.5);
+      border-right: 1px solid rgba(255,255,255,0.6);
+      border-top-left-radius: 50% 30%;
+      border-top-right-radius: 50% 30%;
+      transform: perspective(200px) rotateX(8deg);
+    }
+
+    #shade-handle-big { 
+      position: absolute; 
+      left: 50%; 
+      transform: translateX(-50%); 
+      top: -14px; 
+      width: 50px; 
+      height: 30px; 
+      border-radius: 100%; 
+      border-top: 1px solid rgba(255,255,255,0.7); 
+    }
+    
+    #shade-handle-small { 
+      position: absolute; 
+      left: 50%; 
+      transform: translateX(-50%); 
+      top: -33px; 
+      width: 20px; 
+      height: 20px; 
+      border-radius: 100%; 
+      border: 1px solid rgba(255,255,255,0.5); 
+      border-bottom: none; 
+    }
+    
+    #bottom-shade {
+      position: absolute;
+      bottom: -15px;
+      width: 100%;
+      height: 40px;
+      transform: scaleY(0.5);
+      border-radius: 100%;
+      background: radial-gradient(#d287a5, #da9db6, #985e74);
+      /* Quitamos la animación floatAnimate del vidrio */
+    }
+
+    #shade-main-reflections {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: #6d6179;
+      transform: perspective(200px) rotateX(8deg);
+      opacity: 0.15;
+      border-top-left-radius: 50% 30%;
+      border-top-right-radius: 50% 30%;
+    }
+
+    /* FLOR - SOLO ESTA SE MUEVE */
+    #flower-wrap {
+      position: absolute;
+      bottom: 85px;          /* ajustado para que no se salga arriba */
+      left: 60%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 300px;
+      z-index: 8;
+      
+      /* Animación solo aquí */
+      animation: flower-float 3.8s ease-in-out infinite;
+    }
+
+    @keyframes flower-float {
+      0%, 100% { transform: translateX(-50%) translateY(0px); }
+      50%      { transform: translateX(-50%) translateY(-14px); }
+    }
+
+    #stem {
+      position: absolute;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%) rotate(-3deg);
+      width: 100px;
+      height: 150px;
+      background: transparent;
+      border: solid 4px #a1b965;
+      border-color: transparent transparent transparent #a1b965;
+      border-radius: 50%/120px 100px 0 0;
+    }
+
+    #petal1, #petal2, #petal3, #petal4, #petal5, #falling-petal {
+      position: absolute;
+      box-shadow: 1px -1px 1px 0 #6f1232;
+    }
+
+    #petal1 { left: 65px; top: 125px; width: 25px; height: 25px; border-radius: 50% 10% 50% 40%; background: #c82b60; transform: rotate(32deg) scale(1.6); }
+    #petal1:after { content: ""; position: absolute; height: 100%; width: 100%; border-radius: inherit; box-shadow: 0 0 35px 0 #e8b2ca; animation: glow 3s ease-in-out infinite; }
+    
+    #petal2 { left: 53px; top: 122px; width: 25px; height: 30px; border-radius: 50% 50% 50% 10%; background: #d05478; transform: rotate(35deg) scale(1.2); }
+    #petal3 { left: 73px; top: 134px; width: 25px; height: 28px; border-radius: 50% 10% 10% 50%; background: #cb5275; transform: rotate(25deg); }
+    #petal4 { left: 48px; top: 128px; width: 25px; height: 25px; border-radius: 50% 50% 50% 10%; background: #d26484; transform: rotate(30deg); }
+    #petal5 { left: 73px; top: 144px; width: 25px; height: 20px; border-radius: 50% 10% 10% 50%; background: #d26484; transform: rotate(28deg); }
+
+    #falling-petal {
+      left: 73px;
+      top: 146px;
+      width: 22px;
+      height: 18px;
+      border-radius: 50% 10% 10% 50%;
+      background: #da7290;
+      animation: fall 7s ease-in-out infinite 2s;
+    }
+
+    #leaf1 { position: absolute; left: 45px; top: 165px; width: 13px; height: 20px; border-radius: 50% 50% 50% 10%; background: #a1b965; transform: rotate(5deg); }
+    #leaf2 { position: absolute; left: 52px; top: 205px; width: 12px; height: 16px; border-radius: 50% 50% 50% 10%; background: #a1b965; transform: rotate(-97deg); }
+
+    .dustDef {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 3px 1px white;
+      opacity: 0;
+    }
+
+    /* Texto */
+    .romantic-text {
+      position: absolute;
+      top: 8%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 3.5vw;
+      text-align: center;
+      color: #fff;
+      text-shadow: 0 0 25px #ff69b4;
+      background: rgba(0,0,0,0.5);
+      padding: 15px 30px;
+      border-radius: 25px;
+      border: 2px solid #ff69b4;
+      z-index: 20;
+    }
+    .romantic-text span { color: #ff1493; }
+
+    /* Animaciones */
+    @keyframes glow { 0%,100% { box-shadow: 0 0 25px #e8b2ca; } 50% { box-shadow: 0 0 45px #e8b2ca; } }
+    @keyframes fall {
+      0% { top: 146px; left: 73px; transform: rotate(32deg); opacity: 0.9; }
+      100% { top: 280px; left: 90px; transform: rotate(300deg); opacity: 0; }
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      background: linear-gradient(#ff69b4, #c71585);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      z-index: 30;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stars" id="stars"></div>
+
+  <div class="romantic-text">
+    Dejarás de gustarme cuando el <span>último pétalo caiga</span> 🌹
+  </div>
+
+  <div id="castle">
+    <div id="table"></div>
+    
+    <div id="flower-wrap">
+      <div id="stem"></div>
+      <div id="petal1"></div>
+      <div id="petal2"></div>
+      <div id="petal3"></div>
+      <div id="petal4"></div>
+      <div id="petal5"></div>
+      <div id="falling-petal"></div>
+      <div id="leaf1"></div>
+      <div id="leaf2"></div>
+    </div>
+
+    <div class="shade-wrap">
+      <div id="shade-main">
+        <div id="shade-handle-big"></div>
+        <div id="shade-handle-small"></div>
+      </div>
+      <div id="bottom-shade"></div>
+      <div id="shade-main-reflections"></div>
+    </div>
+  </div>
+
+  <a href="index.html" class="back-btn">← Regresar</a>
+
+  <script>
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 150; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      const size = Math.random() * 2 + 0.5;
+      star.style.width = star.style.height = size + 'px';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.setProperty('--opacity', Math.random() * 0.5 + 0.4);
+      star.style.animationDelay = Math.random() * 10 + 's';
+      starsContainer.appendChild(star);
+    }
+
+    (() => {
+      const head = document.head;
+      let animationId = 1;
+      function CreateMagicDust(x1, x2, y1, y2, sizeRatio, fallingTime, animationDelay) {
+        let dust = document.createElement('span');
+        let animation = document.createElement('style');
+        animation.innerHTML = `@keyframes blink${animationId}{0%{top:${y1}px;left:${x1}px;opacity:.4}100%{top:${y2}px;left:${x2}px;opacity:0}}`;
+        head.appendChild(animation);
+        dust.classList.add('dustDef');
+        dust.style.width = dust.style.height = (4 * sizeRatio) + 'px';
+        dust.style.animation = `blink${animationId++} ${fallingTime}s infinite ${animationDelay}s`;
+        document.getElementById('flower-wrap').appendChild(dust);
+      }
+      for(let i=0; i<15; i++){
+        CreateMagicDust(Math.random()*100+50, Math.random()*100+50, Math.random()*100+100, 250, Math.random(), 2+Math.random()*2, Math.random()*2);
+      }
+    })();
+  </script>
+</body>
+</html>
