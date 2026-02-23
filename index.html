@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Esto es para ti 🌹💕</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Niconne&display=swap" rel="stylesheet">
@@ -19,21 +19,24 @@
 
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      height: 100vh;
-      background: radial-gradient(circle at center, #2a0d1a, #0a0015 70%);
+    html, body {
+      height: 100%;
       overflow: hidden;
+      background: radial-gradient(circle at center, #2a0d1a, #0a0015 70%);
       font-family: 'Niconne', cursive;
       color: #ff69b4;
+      touch-action: none; /* Mejora touch en móviles */
     }
     h1 {
       position: absolute;
-      top: 8%;
+      top: 5vh;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 8vw;
+      font-size: clamp(2.5rem, 8vw, 6rem);
       text-shadow: 0 0 20px #ff1493, 0 0 40px #c71585;
       z-index: 20;
+      text-align: center;
+      max-width: 90%;
       animation: glow 4s infinite alternate;
     }
     @keyframes glow {
@@ -49,71 +52,39 @@
 
     #rose-3d {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      inset: 0;
       z-index: 5;
     }
 
-    .flowers {
-      position: absolute;
-      width: 100%; height: 100%;
-      bottom: 0;
-      z-index: 10;
-      pointer-events: none;
-    }
-    .flower {
-      position: absolute;
-      bottom: 0;
-      animation: blossom 5s ease-in-out forwards;
-      animation-delay: calc(var(--delay) * 1s);
-    }
-    @keyframes blossom {
-      0% { transform: scale(0) rotateY(0deg); opacity: 0; }
-      100% { transform: scale(1) rotateY(720deg); opacity: 1; }
-    }
+    .flowers { display: none; } /* Ocultamos las flores 2D si usamos 3D principal, o quítalo si las quieres */
 
-    .petal {
-      position: absolute;
-      width: 18px;
-      height: 28px;
-      background: radial-gradient(#ff69b4, #c71585);
-      border-radius: 50% 0 50% 50%;
-      opacity: 0.8;
-      animation: fall linear infinite;
-      box-shadow: 0 0 12px #ff1493;
-    }
-    @keyframes fall {
-      0% { transform: translateY(-150vh) rotate(0deg); }
-      100% { transform: translateY(150vh) rotate(1080deg); }
-    }
-
-    main { position: relative; z-index: 1; }
     p {
       position: fixed;
-      bottom: 20px;
+      bottom: 8vh;
       left: 50%;
       transform: translateX(-50%);
-      font-size: max(3.3vw, 15px);
-      color: rgba(255, 255, 255, 0.5);
+      font-size: clamp(1.2rem, 4vw, 2rem);
+      color: rgba(255, 255, 255, 0.6);
       z-index: 15;
+      text-align: center;
+      max-width: 90%;
     }
 
     canvas {
+      display: block; /* Evita espacios extra */
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      inset: 0;
       user-select: none;
-      z-index: 0;
+      touch-action: none;
     }
 
-    /* BOTÓN ESPECIAL - más chico y un poco más abajo */
     .special-btn {
       position: fixed;
-      bottom: 10%;  /* ← bajado de 15% a 10% */
+      bottom: 12vh;
       left: 50%;
       transform: translateX(-50%);
-      padding: 12px 30px;  /* más chico */
-      font-size: 1.8rem;   /* más chico que 2.5rem */
+      padding: clamp(10px, 3vw, 16px) clamp(20px, 6vw, 40px);
+      font-size: clamp(1.4rem, 5vw, 2.2rem);
       font-family: 'Niconne', cursive;
       color: #fff;
       background: linear-gradient(135deg, #ff69b4, #c71585);
@@ -128,8 +99,8 @@
       display: inline-block;
     }
 
-    .special-btn:hover {
-      transform: translateX(-50%) scale(1.1);
+    .special-btn:hover, .special-btn:active {
+      transform: translateX(-50%) scale(1.08);
       box-shadow: 0 0 50px #ff1493;
     }
 
@@ -138,15 +109,17 @@
       100% { transform: translateX(-50%) scale(1.05); }
     }
 
-    .special-btn::before {
-      content: '🌹 ';
-    }
-    .special-btn::after {
-      content: ' 🌹';
+    .special-btn::before { content: '🌹 '; }
+    .special-btn::after { content: ' 🌹'; }
+
+    @media (orientation: portrait) and (max-width: 600px) {
+      h1 { top: 4vh; font-size: clamp(2rem, 10vw, 4rem); }
+      .special-btn { bottom: 10vh; padding: 10px 25px; font-size: 1.8rem; }
+      p { bottom: 6vh; font-size: 1.4rem; }
     }
   </style>
 </head>
-<body class="not-loaded">
+<body>
   <div class="container">
     <main>
       <h1>Porque te gustan las rosas y porque estas preciosa 🌹</h1>
@@ -155,23 +128,11 @@
 
     <div id="rose-3d"></div>
 
-    <div class="flowers">
-      <div class="flower" style="--delay:0; left:15%; --flower-color:#ff69b4;">
-        <div class="flower__leafs">
-          <div class="flower__leaf" style="background:var(--flower-color); transform:rotate(0deg) scale(1);"></div>
-          <div class="flower__leaf" style="background:var(--flower-color); transform:rotate(45deg) scale(0.9);"></div>
-          <div class="flower__leaf" style="background:var(--flower-color); transform:rotate(90deg) scale(1.1);"></div>
-          <div class="flower__leaf" style="background:var(--flower-color); transform:rotate(135deg) scale(0.95);"></div>
-          <div class="flower__white-circle"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- BOTÓN AJUSTADO -->
+    <!-- BOTÓN -->
     <a href="especial.html" class="special-btn">Para ti</a>
   </div>
 
-  <!-- Pétalos cayendo -->
+  <!-- Pétalos cayendo (menos en móviles) -->
   <script>
     function createPetal() {
       const petal = document.createElement('div');
@@ -180,67 +141,63 @@
       petal.style.animationDuration = (Math.random() * 12 + 8) + 's';
       petal.style.animationDelay = Math.random() * 6 + 's';
       petal.style.opacity = Math.random() * 0.4 + 0.6;
+      petal.style.width = Math.random() * 10 + 12 + 'px';
+      petal.style.height = Math.random() * 15 + 20 + 'px';
       document.body.appendChild(petal);
       setTimeout(() => petal.remove(), 25000);
     }
-    for(let i=0; i<40; i++) createPetal();
-    setInterval(createPetal, 600);
+
+    const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+    const petalCount = isMobile ? 20 : 40;
+    for(let i = 0; i < petalCount; i++) createPetal();
+    setInterval(() => {
+      if (Math.random() > (isMobile ? 0.6 : 0.3)) createPetal(); // menos frecuente en móvil
+    }, isMobile ? 1200 : 600);
   </script>
 
-  <script>
-    window.onload = () => {
-      setTimeout(() => {
-        document.body.classList.remove('not-loaded');
-      }, 800);
-    };
-  </script>
-
-  <!-- ROSA 3D con múltiples clones -->
+  <!-- ROSA 3D responsive -->
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 
-    let container, camera, scene, renderer, controls;
+    const container = document.getElementById('rose-3d');
+    let camera, scene, renderer, controls;
     let originalObject;
 
-    const materialBase = new THREE.MeshStandardMaterial({
-      metalness: 0,
-      roughness: 0.8,
-      side: THREE.DoubleSide
-    });
+    const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
 
     init();
     animate();
 
     function init() {
-      container = document.getElementById('rose-3d');
-
-      camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 2000);
-      camera.position.set(0, 100, 400);
+      camera = new THREE.PerspectiveCamera(isMobile ? 55 : 40, window.innerWidth / window.innerHeight, 1, 2000);
+      camera.position.set(0, 80, isMobile ? 500 : 400); // más lejos en móvil para ver todo
 
       scene = new THREE.Scene();
 
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
       scene.add(ambientLight);
 
-      const pointLight = new THREE.PointLight(0xffffff, 1.2);
+      const pointLight = new THREE.PointLight(0xffffff, 1.5);
       pointLight.position.set(200, 300, 200);
       scene.add(pointLight);
 
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // limita en móviles para rendimiento
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.shadowMap.enabled = true;
       container.appendChild(renderer.domElement);
 
       controls = new OrbitControls(camera, renderer.domElement);
       controls.autoRotate = true;
-      controls.autoRotateSpeed = 1.5;
+      controls.autoRotateSpeed = isMobile ? 0.8 : 1.5; // más lento en móvil
       controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.enableZoom = true;
+      controls.minDistance = isMobile ? 200 : 100;
+      controls.maxDistance = isMobile ? 1000 : 800;
       controls.enablePan = true;
-      controls.minDistance = 100;
-      controls.maxDistance = 800;
       controls.target.set(0, 0, 0);
       controls.update();
 
@@ -251,7 +208,11 @@
           originalObject = obj;
           originalObject.traverse((child) => {
             if (child.isMesh) {
-              let mat = materialBase.clone();
+              let mat = new THREE.MeshStandardMaterial({
+                metalness: 0,
+                roughness: 0.8,
+                side: THREE.DoubleSide
+              });
               if (child.name.includes('rose')) mat.color.set('crimson');
               else if (child.name.includes('calyx')) mat.color.set('#001a14');
               else if (child.name.includes('leaf')) mat.color.set('#00331b');
@@ -263,33 +224,38 @@
           originalObject.rotation.set(0, Math.PI / 1.7, 0);
 
           const positions = [
-            {x: 0, y: -50, z: 0, scale: 0.4, rotY: 0},
-            {x: 150, y: -30, z: 100, scale: 0.35, rotY: Math.PI / 4},
-            {x: -120, y: -40, z: -80, scale: 0.45, rotY: -Math.PI / 3},
-            {x: 80, y: -20, z: -150, scale: 0.3, rotY: Math.PI / 2},
-            {x: -180, y: -60, z: 50, scale: 0.38, rotY: -Math.PI / 5},
-            {x: 0, y: 20, z: 120, scale: 0.32, rotY: Math.PI}
+            {x: 0, y: -50, z: 0, scale: isMobile ? 0.35 : 0.4},
+            {x: 150, y: -30, z: 100, scale: isMobile ? 0.3 : 0.35},
+            {x: -120, y: -40, z: -80, scale: isMobile ? 0.4 : 0.45},
+            {x: 80, y: -20, z: -150, scale: isMobile ? 0.25 : 0.3},
+            {x: -180, y: -60, z: 50, scale: isMobile ? 0.33 : 0.38},
+            {x: 0, y: 20, z: 120, scale: isMobile ? 0.28 : 0.32}
           ];
 
           positions.forEach(pos => {
             const clone = originalObject.clone();
             clone.position.set(pos.x, pos.y, pos.z);
             clone.scale.setScalar(pos.scale);
-            clone.rotation.y = pos.rotY;
+            clone.rotation.y = pos.rotY || 0;
             scene.add(clone);
           });
         },
-        (xhr) => console.log((xhr.loaded / xhr.total * 100) + '% cargado'),
-        (err) => console.error('Error:', err)
+        undefined,
+        (err) => console.error('Error cargando modelo:', err)
       );
 
       window.addEventListener('resize', onWindowResize);
     }
 
     function onWindowResize() {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // actualiza pixel ratio (útil al rotar móvil)
     }
 
     function animate() {
